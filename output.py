@@ -68,26 +68,28 @@ def result(maze_path, algorithm):
     tracemalloc.stop()
     elapsed_time = (end_time - start_time)*1000
 
-    step, weight = 0, 0
-    steps, weights, actions = [], [], []
+    step, weight, cost = 0, 0, 0
+    steps, weights, actions, costs = [], [], [], []
 
     for current in path[1:]:
-        current_state = current
         prev_state = current.prev_state
         stone_move = 0
 
-        for (current_stone, prev_stone) in zip(current_state.stones, prev_state.stones):
+        for (current_stone, prev_stone) in zip(current.stones, prev_state.stones):
             if current_stone != prev_stone:
                 weight += current_stone.weight
 
                 stone_move = 1
                 break
 
-        move = get_move(prev_state.ares, current_state.ares, stone_move)
-        actions.append(move)
-        weights.append(weight)
         step += 1
+        move = get_move(prev_state.ares, current.ares, stone_move)
+        cost = current.cost
+
         steps.append(step)
+        weights.append(weight)
+        actions.append(move)
+        costs.append(cost)
 
     actions_str = ''.join(actions)
 
@@ -105,7 +107,7 @@ def result(maze_path, algorithm):
 
     result_str = f'{algorithm_name}\nSteps: {step}, Weight: {weight}, Nodes: {NODES}, Time (ms): {elapsed_time:.2f}, Memory (MB): {memory_usage:.2f}\n{actions_str}'
 
-    return result_str, steps, weights, actions
+    return result_str, weights, costs
 
 
 def visualize(path):
@@ -129,23 +131,30 @@ def solve(maze_path):
     results_output = []
     results_gui = []
 
-    bfs_str, bfs_steps, bfs_weights, bfs_actions = result(maze_path, bfs)
+    bfs_str, bfs_weights, bfs_costs = result(maze_path, bfs)
     results_output.append(bfs_str)
     results_gui.append(bfs_str)
     results_gui.append(bfs_weights)
-    dfs_str, dfs_steps, dfs_weights, dfs_actions = result(maze_path, dfs)
+    results_gui.append(bfs_costs)
+
+    dfs_str, dfs_weights, dfs_costs = result(maze_path, dfs)
     results_output.append(dfs_str)
     results_gui.append(dfs_str)
     results_gui.append(dfs_weights)
-    ucs_str, ucs_steps, ucs_weights, ucs_actions = result(maze_path, ucs)
+    results_gui.append(dfs_costs)
+
+    ucs_str, ucs_weights, ucs_costs = result(maze_path, ucs)
     results_output.append(ucs_str)
     results_gui.append(ucs_str)
     results_gui.append(ucs_weights)
-    astar_str, astar_steps, astar_weights, astar_actions = result(
+    results_gui.append(ucs_costs)
+
+    astar_str, astar_weights, astar_costs = result(
         maze_path, astar)
     results_output.append(astar_str)
     results_gui.append(astar_str)
     results_gui.append(astar_weights)
+    results_gui.append(astar_costs)
 
     results_output = '\n'.join(results_output)
     print(results_output)
@@ -160,7 +169,7 @@ def solve(maze_path):
     output_gui_dir = os.path.dirname(output_gui_path)
     os.makedirs(output_gui_dir, exist_ok=True)
     with open(output_gui_path, "w") as file:
-        file.write(results_output)
+        file.write(results_gui)
 
 
 if __name__ == '__main__':
