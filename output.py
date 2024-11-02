@@ -110,23 +110,6 @@ def result(maze_path, algorithm):
     return result_str, weights
 
 
-def visualize(path):
-    for state in path:
-        for i, row in enumerate(state.maze):
-            for j, col in enumerate(row):
-                if (i, j) == state.ares:
-                    print(ARES, end=' ')
-                elif (i, j) in [stone.position for stone in state.stones]:
-                    print(STONE, end=' ')
-                elif col == SWITCH:
-                    print(SWITCH, end=' ')
-                else:
-                    print(col, end=' ')
-            print()
-        print("--------------")
-        time.sleep(1)
-
-
 def solve(maze_path):
     results_output = []
     results_gui = []
@@ -153,8 +136,9 @@ def solve(maze_path):
     results_gui.append(astar_weights)
 
     results_output = '\n'.join(results_output)
-    print(results_output)
-
+    results_gui_str = '\n'.join([str(item) for item in results_gui])
+    
+    print(results_gui_str)
     output_path = maze_path.replace("input", "output")
     output_dir = os.path.dirname(output_path)
     os.makedirs(output_dir, exist_ok=True)
@@ -165,19 +149,16 @@ def solve(maze_path):
     output_gui_dir = os.path.dirname(output_gui_path)
     os.makedirs(output_gui_dir, exist_ok=True)
     with open(output_gui_path, "w") as file:
-        file.write(results_gui)
+        file.write(results_gui_str)
+
 
 
 if __name__ == '__main__':
-    for i in range(3, 10):
-        print(f'Maze {i+1}')
-        maze_path = f'input\\input-0{i+1}.txt'
-        if i >= 9:
-            maze_path = f'input\\input-{i+1}.txt'
-        result_str, weights = result(maze_path, astar)
-        print(result_str)
-        print(weights)
-    maze_path = input('File: ')
-    dfs_str, dfs_weights = result(maze_path, bfs)
-    print(dfs_str)
-    print(dfs_weights)
+    # for i in range(0, 10):
+    #     print(f'Maze {i+1}')
+    #     maze_path = f'input\\input-0{i+1}.txt'
+    #     if i >= 9:
+    #         maze_path = f'input\\input-{i+1}.txt'
+    #     result_str, weights = result(maze_path, astar)
+    #     print(result_str)
+    #     print(weights)
