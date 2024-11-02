@@ -1,40 +1,62 @@
-from queue import PriorityQueue
 from maze import WALL, FREE, STONE, ARES, SWITCH, STONE_ON_SWITCH, ARES_ON_SWITCH, Stone
 from node import Node
+from queue import PriorityQueue
 
 
 def ucs(maze, ares_start, stones, switches):
     nodes = 0
     frontier = PriorityQueue()  # Priority queue based on cost
+    
+    # Set to store expanded (explored) states
     expanded = set()  # Explored states
-    frontier_set = set()  # For quick check if a state is in frontier
+    
+    # Dictionary to store the lowest cost to reach each state
+    cost_so_far = {}  # Cost to reach each state
 
+    # Create the initial state node and add it to the frontier
     initial_state = Node(maze, ares_start, stones, switches)
     frontier.put((initial_state.cost, initial_state))
-    frontier_set.add(initial_state)
+
+    cost_so_far[initial_state] = initial_state.cost
     nodes += 1
 
+    # UCS main loop, runs until the frontier is empty
     while not frontier.empty():
+        # Get the node with the lowest cost from the priority queue
         _, current_state = frontier.get()
-        frontier_set.remove(current_state)
-
+        
+        # If the current state is the goal, return the path
         if current_state.is_goal():
             path = []
             while current_state:
                 path.append(current_state)
                 current_state = current_state.prev_state
             return path[::-1], nodes
-
+        
+        # Add the current state to the expanded set
         expanded.add(current_state)
-        nodes += 1
+        
+        # Get neighbors of the current state
+        for neighbor in current_state.get_neighbors():
+            new_cost = current_state.cost + 1  # Default cost for moving Ares
+            for stone in neighbor.stones:
+                if stone.position != current_state.stones[neighbor.stones.index(stone)].position:
+                    new_cost += stone.weight  # Add stone weight if stone is moved
+                    break
+            
+            # If the neighbor state has not been expanded or found a cheaper path
+            if neighbor not in expanded:
+                if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
+                    cost_so_far[neighbor] = new_cost
+                    neighbor.cost = new_cost
+                    frontier.put((new_cost, neighbor))
+                    nodes += 1
+            elif new_cost < cost_so_far[neighbor]:
+                cost_so_far[neighbor] = new_cost
+                # Remove the old neighbor from the frontier
+                # Note: PriorityQueue does not support direct removal, so we need to re-add the neighbor with the updated cost
+                frontier.put((new_cost, neighbor))
+                neighbor.cost = new_cost
 
-        neighbors = current_state.get_neighbors()
-        for neighbor in neighbors:
-            if neighbor in expanded:
-                continue
-
-            if neighbor not in frontier_set:
-                frontier.put((neighbor.cost, neighbor))
-                frontier_set.add(neighbor)
-
+    # If no solution is found, return an empty path and the number of nodes expanded
     return None, nodes
