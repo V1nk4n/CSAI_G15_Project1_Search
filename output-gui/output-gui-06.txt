@@ -1,0 +1,12 @@
+BFS
+Steps: 21, Weight: 171, Nodes: 11788, Time (ms): 3682.51, Memory (MB): 0.15
+ldddLulDllllllUluRRRR
+[0, 0, 0, 0, 3, 3, 3, 6, 6, 6, 6, 6, 6, 6, 39, 39, 39, 72, 105, 138, 171]
+DFS
+Steps: 115, Weight: 375, Nodes: 11067, Time (ms): 3122.86, Memory (MB): 0.33
+ddddruuuuulldddddlUdruuuuulddDDuuuurdddddLuuuuulllllddddluuuulddDuuurddddLdlUdruuuuulddDuuulddddRdrUdluuRRdrUdluuRR
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 6, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 45, 45, 45, 45, 45, 45, 45, 45, 45, 78, 78, 78, 111, 111, 111, 111, 111, 111, 111, 111, 111, 111, 111, 144, 144, 144, 144, 144, 144, 144, 144, 144, 177, 177, 177, 210, 210, 210, 210, 210, 243, 276, 276, 276, 309, 309, 309, 309, 309, 342, 375]
+A*
+Steps: 23, Weight: 171, Nodes: 798, Time (ms): 234.40, Memory (MB): 0.05
+llddrdLulDllllllUluRRRR
+[0, 0, 0, 0, 0, 0, 3, 3, 3, 6, 6, 6, 6, 6, 6, 6, 39, 39, 39, 72, 105, 138, 171]
