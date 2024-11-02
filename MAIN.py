@@ -1,6 +1,6 @@
 import pygame, sys
-import sokoban
-from sokoban import Button, ButtonB
+import gui
+from gui import Button, ButtonB
 
 pygame.init()
 
@@ -94,7 +94,7 @@ def reset_game(level):
     current_move_index = 0
     move_timer = 0
     # Reload the game level
-    game = sokoban.GAME('input/' + level)
+    game = gui.GAME('input/' + level)
     # Additional resets if necessary, e.g., score, timer, etc.
     return game  # Return the new game instance
     
@@ -105,7 +105,7 @@ def gameplay(level):
     astar_clicked = False
     is_start = True
     outputfile = "output-gui" + level[5:]
-    game = sokoban.GAME('input/' + level)
+    game = gui.GAME('input/' + level)
     size = game.load_size()
     SCREEN = pygame.display.set_mode((size[0] + 240, size[1] + 100))
     SCREEN.fill(0)
@@ -189,9 +189,9 @@ def gameplay(level):
                 game_completed = True  # Mark as completed to prevent future changes
                 SCREEN.fill(0)
                 bfs_clicked = dfs_clicked = ucs_clicked = astar_clicked = False
-            sokoban.display_end(SCREEN, (size[0] + 20, 350))
+            gui.display_end(SCREEN, (size[0] + 20, 350))
 
-        sokoban.print_game(game.get_matrix(), SCREEN, level)
+        gui.print_game(game.get_matrix(), SCREEN, level)
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -203,28 +203,28 @@ def gameplay(level):
                     is_moving = False
                     bfs_clicked = True
                     dfs_clicked = ucs_clicked = astar_clicked = False
-                    movement_string, weights = sokoban.solution(outputfile, 'bfs')
+                    movement_string, weights = gui.solution(outputfile, 'bfs')
                     # No weight update here; it stays "0" until the first move
 
                 elif DFS_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     is_moving = False
                     dfs_clicked = True
                     bfs_clicked = ucs_clicked = astar_clicked = False
-                    movement_string, weights = sokoban.solution(outputfile, 'dfs')
+                    movement_string, weights = gui.solution(outputfile, 'dfs')
                     # No weight update here; it stays "0" until the first move
 
                 elif UCS_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     is_moving = False
                     ucs_clicked = True
                     bfs_clicked = dfs_clicked = astar_clicked = False
-                    movement_string, weights = sokoban.solution(outputfile, 'ucs')
+                    movement_string, weights = gui.solution(outputfile, 'ucs')
                     # No weight update here; it stays "0" until the first move
 
                 elif ASTAR_BUTTON.checkForInput(PLAY_MOUSE_POS):
                     is_moving = False
                     astar_clicked = True
                     bfs_clicked = dfs_clicked = ucs_clicked = False
-                    movement_string, weights = sokoban.solution(outputfile, 'astar')
+                    movement_string, weights = gui.solution(outputfile, 'astar')
                     # No weight update here; it stays "0" until the first move
 
                 elif START_PAUSE_BUTTON.checkForInput(PLAY_MOUSE_POS):
