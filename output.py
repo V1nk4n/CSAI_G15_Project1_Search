@@ -170,6 +170,6 @@ def solve(maze_path):
 
 if __name__ == '__main__':
     maze_path = input('File: ')
-    dfs_str, dfs_weights, dfs_costs = result(maze_path, bfs)
+    dfs_str, dfs_weights = result(maze_path, bfs)
     print(dfs_str)
     print(dfs_weights)
