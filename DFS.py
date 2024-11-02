@@ -25,6 +25,7 @@ def dfs(maze, ares_start, stones, switches):
 
         # Đánh dấu trạng thái hiện tại là đã mở rộng
         expanded.add(current_state)
+        NODES += 1
 
         if current_state.is_goal():  # Kiểm tra xem có phải trạng thái đích không
             path = []
@@ -40,6 +41,5 @@ def dfs(maze, ares_start, stones, switches):
             if neighbor not in frontier_set:  # Thêm trạng thái vào frontier nếu chưa mở rộng
                 frontier.put(neighbor)
                 frontier_set.add(neighbor)
-                NODES += 1
 
     return None

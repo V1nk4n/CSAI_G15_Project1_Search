@@ -28,6 +28,7 @@ def ucs(maze, ares_start, stones, switches):
             return path[::-1], NODES
 
         expanded.add(current_state)
+        NODES += 1
 
         neighbors = current_state.get_neighbors()
         for neighbor in neighbors:
@@ -37,6 +38,5 @@ def ucs(maze, ares_start, stones, switches):
             if neighbor not in frontier_set:
                 frontier.put((neighbor.cost, neighbor))
                 frontier_set.add(neighbor)
-                NODES += 1
 
     return None

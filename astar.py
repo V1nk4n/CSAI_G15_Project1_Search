@@ -137,9 +137,11 @@ def astar(maze, ares_start, stones, switches):
             while current_state:
                 path.append(current_state)
                 current_state = current_state.prev_state
-            return path[::-1], NODES  # Trả về đường đi từ trạng thái đầu -> đích
+            # Trả về đường đi từ trạng thái đầu -> đích
+            return path[::-1], NODES
 
         expanded.add(current_state)
+        NODES += 1
 
         # Lấy các trạng thái được mở rộng bởi trạng thái hiện tại
         neighbors = current_state.get_neighbors()
@@ -148,6 +150,4 @@ def astar(maze, ares_start, stones, switches):
             if neighbor not in expanded and neighbor not in frontier_set:
                 frontier.put((neighbor.cost, neighbor))
                 frontier_set.add(neighbor)
-                NODES += 1
     return None
-
