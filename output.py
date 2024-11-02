@@ -10,21 +10,33 @@ from maze import Stone, WALL, FREE, STONE, ARES, SWITCH, ARES_ON_SWITCH, STONE_O
 
 def load_map(path):
     with open(path, 'r') as file:
-        weights = list(map(int, file.readline().strip().split()))
-        maze = [list(line.strip()) for line in file.readlines()]
+        first_line = file.readline().strip()
+        weights = list(map(int, first_line.split()))
+        maze = [line for line in file.readlines()]
 
-    stones, switches = [], []
     i_stone = 0
+    stones = []
+    switches = []
 
-    for i, row in enumerate(maze):
-        for j, col in enumerate(row):
-            if col == '@' or col == '+':
-                ares_start = (i, j)
-            elif col == '$' or col == '*':
-                stones.append(Stone((i, j), weights[i_stone]))
+    maze = [x.replace('\n', '') for x in maze]
+    maze = [','.join(maze[i]) for i in range(len(maze))]
+    maze = [x.split(',') for x in maze]
+    maxColsNum = max([len(x) for x in maze])
+    for irow in range(len(maze)):
+        for icol in range(len(maze[irow])):
+            if maze[irow][icol] == '@' or maze[irow][icol] == '+':
+                ares_start = (irow, icol)
+            elif maze[irow][icol] == '$' or maze[irow][icol] == '*':
+                stone_position = (irow, icol)
+                stone_weight = weights[i_stone]
+                stone = Stone(stone_position, stone_weight)
+                stones.append(stone)
                 i_stone += 1
-            elif col == '.':
-                switches.append((i, j))
+            elif maze[irow][icol] == '.':
+                switches.append((irow, icol))
+        colsNum = len(maze[irow])
+        if colsNum < maxColsNum:
+            maze[irow].extend(['#' for _ in range(maxColsNum-colsNum)])
 
     return maze, ares_start, stones, switches
 
@@ -56,25 +68,28 @@ def result(maze_path, algorithm):
     tracemalloc.stop()
     elapsed_time = (end_time - start_time)*1000
 
-    step, weight = 0, 0
-    steps, weights, actions = [], [], []
+    step, weight, cost = 0, 0, 0
+    steps, weights, actions, costs = [], [], [], []
 
     for current in path[1:]:
-        current_state = current
         prev_state = current.prev_state
         stone_move = 0
 
-        for (current_stone, prev_stone) in zip(current_state.stones, prev_state.stones):
+        for (current_stone, prev_stone) in zip(current.stones, prev_state.stones):
             if current_stone != prev_stone:
                 weight += current_stone.weight
-                weights.append(weight)
+
                 stone_move = 1
                 break
 
-        move = get_move(prev_state.ares, current_state.ares, stone_move)
-        actions.append(move)
         step += 1
+        move = get_move(prev_state.ares, current.ares, stone_move)
+        cost = current.cost
+
         steps.append(step)
+        weights.append(weight)
+        actions.append(move)
+        costs.append(cost)
 
     actions_str = ''.join(actions)
 
@@ -92,13 +107,7 @@ def result(maze_path, algorithm):
 
     result_str = f'{algorithm_name}\nSteps: {step}, Weight: {weight}, Nodes: {NODES}, Time (ms): {elapsed_time:.2f}, Memory (MB): {memory_usage:.2f}\n{actions_str}'
 
-    # output_path = maze_path.replace("input", "output")
-    # output_dir = os.path.dirname(output_path)
-    # os.makedirs(output_dir, exist_ok=True)
-    # with open(output_path, "w") as file:
-    #     file.write(result)
-
-    return result_str, steps, weights, actions
+    return result_str, weights, costs
 
 
 def visualize(path):
@@ -118,8 +127,60 @@ def visualize(path):
         time.sleep(1)
 
 
+def solve(maze_path):
+    results_output = []
+    results_gui = []
+
+    bfs_str, bfs_weights, bfs_costs = result(maze_path, bfs)
+    results_output.append(bfs_str)
+    results_gui.append(bfs_str)
+    results_gui.append(bfs_weights)
+    results_gui.append(bfs_costs)
+
+    dfs_str, dfs_weights, dfs_costs = result(maze_path, dfs)
+    results_output.append(dfs_str)
+    results_gui.append(dfs_str)
+    results_gui.append(dfs_weights)
+    results_gui.append(dfs_costs)
+
+    ucs_str, ucs_weights, ucs_costs = result(maze_path, ucs)
+    results_output.append(ucs_str)
+    results_gui.append(ucs_str)
+    results_gui.append(ucs_weights)
+    results_gui.append(ucs_costs)
+
+    astar_str, astar_weights, astar_costs = result(
+        maze_path, astar)
+    results_output.append(astar_str)
+    results_gui.append(astar_str)
+    results_gui.append(astar_weights)
+    results_gui.append(astar_costs)
+
+    results_output = '\n'.join(results_output)
+    print(results_output)
+
+    output_path = maze_path.replace("input", "output")
+    output_dir = os.path.dirname(output_path)
+    os.makedirs(output_dir, exist_ok=True)
+    with open(output_path, "w") as file:
+        file.write(results_output)
+
+    output_gui_path = maze_path.replace("input", "output-gui")
+    output_gui_dir = os.path.dirname(output_gui_path)
+    os.makedirs(output_gui_dir, exist_ok=True)
+    with open(output_gui_path, "w") as file:
+        file.write(results_gui)
+
+
 if __name__ == '__main__':
-    maze_txt = 'input\\input-debai.txt'
-    algorithm = bfs
-    result_str, steps, weights, actions = result(maze_txt, algorithm)
-    print(result_str)
+    # for i in range(10):
+    #     print(f'Maze {i+1}')
+    #     maze_path = f'input\\input-0{i+1}.txt'
+    #     if i >= 10:
+    #         maze_path = f'input\\input-{i+1}.txt'
+    #     print(maze_path)
+
+    maze_path = f'input\\input-01.txt'
+    bfs_str, bfs_steps, bfs_weights, bfs_actions = result(maze_path, astar)
+    print(bfs_str)
+    print(bfs_weights)
