@@ -169,7 +169,7 @@ def solve(maze_path):
 
 
 if __name__ == '__main__':
-    for i in range(8, 10):
+    for i in range(3, 10):
         print(f'Maze {i+1}')
         maze_path = f'input\\input-0{i+1}.txt'
         if i >= 9:
