@@ -3,7 +3,7 @@ from maze import WALL, FREE, STONE, ARES, SWITCH, STONE_ON_SWITCH, ARES_ON_SWITC
 
 
 class Node:
-    def __init__(self, maze, ares, stones, switches, g=0, prev_state=None):
+    def __init__(self, maze, ares, stones, switches, g = 0, prev_state=None):
         self.maze = [row[:] for row in maze]
         self.ares = ares
         self.stones = stones

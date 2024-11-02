@@ -1,8 +1,8 @@
 import os
 import time
 import tracemalloc
-from bfs import bfs, NODES
-from dfs import dfs, NODES
+from BFS import bfs, NODES
+from DFS import dfs, NODES
 from ucs import ucs, NODES
 from astar import astar, NODES
 from maze import Stone, WALL, FREE, STONE, ARES, SWITCH, ARES_ON_SWITCH, STONE_ON_SWITCH
@@ -119,7 +119,7 @@ def visualize(path):
 
 
 if __name__ == '__main__':
-    maze_txt = 'input\\input-debai.txt'
-    algorithm = bfs
+    maze_txt = r'D:\Hoc_Tap\Senior\CSAI\Lab01_Search\CSAI_G15_Project1_Search\input\input-debai.txt'
+    algorithm = ucs
     result_str, steps, weights, actions = result(maze_txt, algorithm)
     print(result_str)

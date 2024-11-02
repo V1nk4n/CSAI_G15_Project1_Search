@@ -13,45 +13,45 @@ def ucs(maze, ares_start, stones, switches):
     # Set to store expanded (explored) states
     expanded = set()  # Explored states
     
-    # Set to quickly check if a state is in the frontier
-    frontier_set = set()  # For quick check if a state is in frontier
+    # Dictionary to store the lowest cost to reach each state
+    cost_so_far = {}  # Cost to reach each state
 
     # Create the initial state node and add it to the frontier
     initial_state = Node(maze, ares_start, stones, switches)
     frontier.put((initial_state.cost, initial_state))
-    frontier_set.add(initial_state)
+    cost_so_far[initial_state] = initial_state.cost
     NODES += 1
 
     # UCS main loop, runs until the frontier is empty
     while not frontier.empty():
         # Get the node with the lowest cost from the priority queue
         _, current_state = frontier.get()
-        frontier_set.remove(current_state)
-
-        # Check if the current state is the goal state
+        
+        # If the current state is the goal, return the path
         if current_state.is_goal():
-            # If goal is reached, reconstruct the path from start to goal
             path = []
             while current_state:
                 path.append(current_state)
                 current_state = current_state.prev_state
             return path[::-1], NODES
-
-        # Add the current state to the set of expanded states
+        
+        # Add the current state to the expanded set
         expanded.add(current_state)
-
-        # Get all the neighbor states (valid moves) from the current state
-        neighbors = current_state.get_neighbors()
-        for neighbor in neighbors:
-            # Skip neighbor if it has already been expanded
-            if neighbor in expanded:
-                continue
-
-            # If the neighbor is not in the frontier, add it
-            if neighbor not in frontier_set:
-                frontier.put((neighbor.cost, neighbor))
-                frontier_set.add(neighbor)
+        
+        # Get neighbors of the current state
+        for neighbor in current_state.get_neighbors():
+            new_cost = current_state.cost + 1  # Default cost for moving Ares
+            for stone in neighbor.stones:
+                if stone.position != current_state.stones[neighbor.stones.index(stone)].position:
+                    new_cost += stone.weight  # Add stone weight if stone is moved
+                    break
+            
+            # If the neighbor state has not been expanded or found a cheaper path
+            if neighbor not in expanded and (neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]):
+                cost_so_far[neighbor] = new_cost
+                neighbor.cost = new_cost
+                frontier.put((new_cost, neighbor))
                 NODES += 1
 
-    # Return None if no solution is found
-    return None
+    # If no solution is found, return an empty path and the number of nodes expanded
+    return [], NODES
