@@ -177,3 +177,7 @@ if __name__ == '__main__':
         result_str, weights = result(maze_path, astar)
         print(result_str)
         print(weights)
+    maze_path = input('File: ')
+    dfs_str, dfs_weights = result(maze_path, bfs)
+    print(dfs_str)
+    print(dfs_weights)
