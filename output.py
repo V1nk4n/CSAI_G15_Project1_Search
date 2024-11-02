@@ -181,3 +181,4 @@ if __name__ == '__main__':
     result_str, weights = result(maze_path, dfs)
     print(result_str)
     print(weights)
+
