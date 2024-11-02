@@ -124,10 +124,10 @@ def solve(maze_path):
     results_gui.append(dfs_str)
     results_gui.append(dfs_weights)
 
-    # ucs_str, ucs_weights = result(maze_path, ucs)
-    # results_output.append(ucs_str)
-    # results_gui.append(ucs_str)
-    # results_gui.append(ucs_weights)
+    ucs_str, ucs_weights = result(maze_path, ucs)
+    results_output.append(ucs_str)
+    results_gui.append(ucs_str)
+    results_gui.append(ucs_weights)
 
     astar_str, astar_weights = result(
         maze_path, astar)
@@ -137,7 +137,7 @@ def solve(maze_path):
 
     results_output = '\n'.join(results_output)
     results_gui_str = '\n'.join([str(item) for item in results_gui])
-    
+
     print(results_gui_str)
     output_path = maze_path.replace("input", "output")
     output_dir = os.path.dirname(output_path)
@@ -152,12 +152,10 @@ def solve(maze_path):
         file.write(results_gui_str)
 
 
-
 if __name__ == '__main__':
     for i in range(0, 10):
         print(f'Maze {i+1}')
         maze_path = f'input\\input-0{i+1}.txt'
         if i >= 9:
             maze_path = f'input\\input-{i+1}.txt'
-        result_str, weights = result(maze_path, astar)
-        print(result_str)
+        solve(maze_path)

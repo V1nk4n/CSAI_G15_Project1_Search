@@ -1,12 +1,16 @@
 BFS
-Steps: 26, Weight: 44, Nodes: 141197, Time (ms): 46131.84, Memory (MB): 0.18
+Steps: 26, Weight: 44, Nodes: 141197, Time (ms): 18291.07, Memory (MB): 0.18
 lllllluluuRRRRRdRRRRRurDDD
 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 8, 12, 16, 20, 20, 23, 26, 29, 32, 35, 35, 35, 38, 41, 44]
 DFS
-Steps: 112, Weight: 50, Nodes: 28284, Time (ms): 7755.67, Memory (MB): 0.39
+Steps: 112, Weight: 50, Nodes: 28284, Time (ms): 3980.99, Memory (MB): 0.39
 ddruuuuuuldddlddluuuuurdDDDuuuurdddddLuuuuulddddldRuuuuuldddddluuuuuldddddluuuldluuurdRRRRRurrdrdddddluulldRRRRR
 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 6, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 15, 19, 23, 27, 31, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 35, 38, 41, 44, 47, 50]
+UCS
+Steps: 26, Weight: 44, Nodes: 425882, Time (ms): 68542.64, Memory (MB): 0.18
+lllllluuluRRRRRdRRRRRurDDD
+[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 8, 12, 16, 20, 20, 23, 26, 29, 32, 35, 35, 35, 38, 41, 44]
 A*
-Steps: 26, Weight: 44, Nodes: 8620, Time (ms): 3691.33, Memory (MB): 0.18
+Steps: 26, Weight: 44, Nodes: 8620, Time (ms): 1775.71, Memory (MB): 0.18
 lulullllluRRRRRdRRRRRurDDD
 [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 8, 12, 16, 20, 20, 23, 26, 29, 32, 35, 35, 35, 38, 41, 44]
