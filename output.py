@@ -84,7 +84,7 @@ def result(maze_path, algorithm):
 
         step += 1
         move = get_move(prev_state.ares, current.ares, stone_move)
-        cost = current.cost
+        cost = step + weight
 
         steps.append(step)
         weights.append(weight)
@@ -107,7 +107,7 @@ def result(maze_path, algorithm):
 
     result_str = f'{algorithm_name}\nSteps: {step}, Weight: {weight}, Nodes: {NODES}, Time (ms): {elapsed_time:.2f}, Memory (MB): {memory_usage:.2f}\n{actions_str}'
 
-    return result_str, weights, costs
+    return result_str, weights
 
 
 def visualize(path):
@@ -131,30 +131,26 @@ def solve(maze_path):
     results_output = []
     results_gui = []
 
-    bfs_str, bfs_weights, bfs_costs = result(maze_path, bfs)
+    bfs_str, bfs_weights = result(maze_path, bfs)
     results_output.append(bfs_str)
     results_gui.append(bfs_str)
     results_gui.append(bfs_weights)
-    results_gui.append(bfs_costs)
 
-    dfs_str, dfs_weights, dfs_costs = result(maze_path, dfs)
+    dfs_str, dfs_weights = result(maze_path, dfs)
     results_output.append(dfs_str)
     results_gui.append(dfs_str)
     results_gui.append(dfs_weights)
-    results_gui.append(dfs_costs)
 
-    ucs_str, ucs_weights, ucs_costs = result(maze_path, ucs)
+    ucs_str, ucs_weights = result(maze_path, ucs)
     results_output.append(ucs_str)
     results_gui.append(ucs_str)
     results_gui.append(ucs_weights)
-    results_gui.append(ucs_costs)
 
-    astar_str, astar_weights, astar_costs = result(
+    astar_str, astar_weights = result(
         maze_path, astar)
     results_output.append(astar_str)
     results_gui.append(astar_str)
     results_gui.append(astar_weights)
-    results_gui.append(astar_costs)
 
     results_output = '\n'.join(results_output)
     print(results_output)
@@ -173,14 +169,11 @@ def solve(maze_path):
 
 
 if __name__ == '__main__':
-    # for i in range(10):
-    #     print(f'Maze {i+1}')
-    #     maze_path = f'input\\input-0{i+1}.txt'
-    #     if i >= 10:
-    #         maze_path = f'input\\input-{i+1}.txt'
-    #     print(maze_path)
-
-    maze_path = f'input\\input-01.txt'
-    bfs_str, bfs_steps, bfs_weights, bfs_actions = result(maze_path, astar)
-    print(bfs_str)
-    print(bfs_weights)
+    for i in range(7, 10):
+        print(f'Maze {i+1}')
+        maze_path = f'input\\input-0{i+1}.txt'
+        if i >= 9:
+            maze_path = f'input\\input-{i+1}.txt'
+        result_str, weights = result(maze_path, bfs)
+        print(result_str)
+        print(weights)
