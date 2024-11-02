@@ -2,12 +2,9 @@ from maze import WALL, FREE, STONE, ARES, SWITCH, STONE_ON_SWITCH, ARES_ON_SWITC
 from node import Node
 from queue import PriorityQueue
 
-NODES = 0
 
 def ucs(maze, ares_start, stones, switches):
-    global NODES
-    
-    # Initialize priority queue for UCS, which sorts nodes by cost
+    nodes = 0
     frontier = PriorityQueue()  # Priority queue based on cost
     
     # Set to store expanded (explored) states
@@ -19,8 +16,9 @@ def ucs(maze, ares_start, stones, switches):
     # Create the initial state node and add it to the frontier
     initial_state = Node(maze, ares_start, stones, switches)
     frontier.put((initial_state.cost, initial_state))
+
     cost_so_far[initial_state] = initial_state.cost
-    NODES += 1
+    nodes += 1
 
     # UCS main loop, runs until the frontier is empty
     while not frontier.empty():
@@ -33,7 +31,7 @@ def ucs(maze, ares_start, stones, switches):
             while current_state:
                 path.append(current_state)
                 current_state = current_state.prev_state
-            return path[::-1], NODES
+            return path[::-1], nodes
         
         # Add the current state to the expanded set
         expanded.add(current_state)
@@ -52,7 +50,7 @@ def ucs(maze, ares_start, stones, switches):
                     cost_so_far[neighbor] = new_cost
                     neighbor.cost = new_cost
                     frontier.put((new_cost, neighbor))
-                    NODES += 1
+                    nodes += 1
             elif new_cost < cost_so_far[neighbor]:
                 cost_so_far[neighbor] = new_cost
                 # Remove the old neighbor from the frontier
@@ -61,4 +59,4 @@ def ucs(maze, ares_start, stones, switches):
                 neighbor.cost = new_cost
 
     # If no solution is found, return an empty path and the number of nodes expanded
-    return [], NODES
+    return None, nodes

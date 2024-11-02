@@ -32,7 +32,7 @@ class Node:
         new_x, new_y = x + move[0], y + move[1]
         width, height = len(self.maze), len(self.maze[0])
 
-        if new_x < 0 or new_x >= width or new_y < 0 or new_y >= height:
+        if not (0 <= new_x < width and 0 <= new_y < height):
             return None
 
         if self.maze[new_x][new_y] == WALL:
@@ -55,6 +55,7 @@ class Node:
                     new_maze[x][y] = SWITCH if (x, y) in self.switches else FREE
                     new_maze[new_x][new_y] = ARES_ON_SWITCH if new_maze[new_x][new_y] == SWITCH else ARES
 
+
                     new_cost = self.cost + 1 + stone.weight  # Cost includes moving Ares and the stone's weight
 
                     return Node(new_maze, new_ares, new_stones, self.switches, new_cost, self)
@@ -72,8 +73,9 @@ class Node:
         for stone in self.stones:
             if stone.position not in self.switches:
                 x, y = stone.position
-                if (self.maze[x-1][y] == WALL or self.maze[x+1][y] == WALL) and (self.maze[x][y-1] == WALL or self.maze[x][y+1] == WALL):
-                    return True
+                if (x > 0 and x < len(self.maze) - 1 and y > 0 and y < len(self.maze[0]) - 1):
+                    if (self.maze[x-1][y] == WALL or self.maze[x+1][y] == WALL) and (self.maze[x][y-1] == WALL or self.maze[x][y+1] == WALL):
+                        return True
         return False
 
     def get_neighbors(self):
