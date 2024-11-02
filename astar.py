@@ -2,9 +2,6 @@ from queue import PriorityQueue
 from maze import WALL, FREE, STONE, ARES, SWITCH, STONE_ON_SWITCH, ARES_ON_SWITCH, Stone
 
 
-NODES = 0
-
-
 def manhattan_distance(pos1, pos2):
     return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
 
@@ -114,7 +111,7 @@ class Node:
 
 
 def astar(maze, ares_start, stones, switches):
-    global NODES
+    nodes = 0
     frontier = PriorityQueue()  # Hàng đợi ưu tiên theo chi phí
     expanded = set()  # Các trạng thái đã được mở rộng
     frontier_set = set()  # Kiểm tra nhanh một trạng thái đã có trong frontier
@@ -123,7 +120,7 @@ def astar(maze, ares_start, stones, switches):
     # Thêm chi phí và trạng thái bắt đầu
     frontier.put((initial_state.cost, initial_state))
     frontier_set.add(initial_state)
-    NODES += 1
+    nodes += 1
 
     while frontier.empty() == False:
         # Lấy trạng thái có chi phí thấp nhất trong frontier
@@ -138,10 +135,10 @@ def astar(maze, ares_start, stones, switches):
                 path.append(current_state)
                 current_state = current_state.prev_state
             # Trả về đường đi từ trạng thái đầu -> đích
-            return path[::-1], NODES
+            return path[::-1], nodes
 
         expanded.add(current_state)
-        NODES += 1
+        nodes += 1
 
         # Lấy các trạng thái được mở rộng bởi trạng thái hiện tại
         neighbors = current_state.get_neighbors()
@@ -150,4 +147,4 @@ def astar(maze, ares_start, stones, switches):
             if neighbor not in expanded and neighbor not in frontier_set:
                 frontier.put((neighbor.cost, neighbor))
                 frontier_set.add(neighbor)
-    return None
+    return None, nodes
