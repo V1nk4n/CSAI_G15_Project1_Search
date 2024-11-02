@@ -60,7 +60,7 @@ class Node:
 
                     return Node(new_maze, new_ares, new_stones, self.switches, new_cost, self)
 
-        if self.maze[new_x][new_y] in (STONE, STONE_ON_SWITCH):
+        if new_maze[new_x][new_y] in (STONE, STONE_ON_SWITCH):
             return None
 
         new_maze[x][y] = SWITCH if (x, y) in self.switches else FREE
@@ -81,6 +81,7 @@ class Node:
     def get_neighbors(self):
         moves = [(0, -1), (0, 1), (-1, 0), (1, 0)]
         neighbors = []
+        
         for move in moves:
             # Chỉ gọi get_state khi bước di chuyển hợp lệ
             next_state = self.get_state(move)
