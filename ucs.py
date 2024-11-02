@@ -1,20 +1,13 @@
 from queue import PriorityQueue
 from maze import WALL, FREE, STONE, ARES, SWITCH, STONE_ON_SWITCH, ARES_ON_SWITCH, Stone
 
-
-def manhattan_distance(pos1, pos2):
-    return abs(pos1[0] - pos2[0]) + abs(pos1[1] - pos2[1])
-
-
 class Node:
     def __init__(self, maze, ares, stones, switches, g=0, prev_state=None):
         self.maze = [row[:] for row in maze]
         self.ares = ares
         self.stones = stones
         self.switches = switches
-        self.g = g
-        self.h = 0
-        self.cost = self.g + self.h
+        self.cost = g
         self.prev_state = prev_state
 
     def __eq__(self, other):
@@ -29,24 +22,6 @@ class Node:
 
     def __hash__(self):
         return hash((self.ares, tuple(self.stones), tuple(self.switches)))
-
-    def heuristic(self):
-        h = 0
-        empty_switch = self.switches.copy()
-        stones_by_weight = sorted(
-            self.stones, key=lambda stone: stone.weight, reverse=True)
-
-        for stone in stones_by_weight:
-            ares_to_stone = manhattan_distance(self.ares, stone.position)
-
-            nearest_switch, stone_to_nearest_switch = min(
-                ((switch, manhattan_distance(stone.position, switch))
-                 for switch in empty_switch),
-                key=lambda x: x[1]
-            )
-            h += ares_to_stone + stone_to_nearest_switch*stone.weight
-            empty_switch.remove(nearest_switch)
-        return h
 
     def is_goal(self):
         return all(stone.position in self.switches for stone in self.stones)
