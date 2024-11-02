@@ -169,11 +169,11 @@ def solve(maze_path):
 
 
 if __name__ == '__main__':
-    for i in range(0, 10):
+    for i in range(8, 10):
         print(f'Maze {i+1}')
         maze_path = f'input\\input-0{i+1}.txt'
         if i >= 9:
             maze_path = f'input\\input-{i+1}.txt'
-        result_str, weights = result(maze_path, dfs)
+        result_str, weights = result(maze_path, astar)
         print(result_str)
         print(weights)
