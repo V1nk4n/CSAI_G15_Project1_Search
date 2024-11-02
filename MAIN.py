@@ -200,24 +200,28 @@ def gameplay(level):
                 if PLAY_BACK.checkForInput(PLAY_MOUSE_POS):
                     play()
                 elif BFS_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                    is_moving = False
                     bfs_clicked = True
                     dfs_clicked = ucs_clicked = astar_clicked = False
                     movement_string, weights = sokoban.solution(outputfile, 'bfs')
                     # No weight update here; it stays "0" until the first move
 
                 elif DFS_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                    is_moving = False
                     dfs_clicked = True
                     bfs_clicked = ucs_clicked = astar_clicked = False
                     movement_string, weights = sokoban.solution(outputfile, 'dfs')
                     # No weight update here; it stays "0" until the first move
 
                 elif UCS_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                    is_moving = False
                     ucs_clicked = True
                     bfs_clicked = dfs_clicked = astar_clicked = False
                     movement_string, weights = sokoban.solution(outputfile, 'ucs')
                     # No weight update here; it stays "0" until the first move
 
                 elif ASTAR_BUTTON.checkForInput(PLAY_MOUSE_POS):
+                    is_moving = False
                     astar_clicked = True
                     bfs_clicked = dfs_clicked = ucs_clicked = False
                     movement_string, weights = sokoban.solution(outputfile, 'astar')
