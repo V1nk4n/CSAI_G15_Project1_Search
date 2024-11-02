@@ -385,9 +385,9 @@ def solution(filename, search_type):
     # Mapping of types to line numbers
     line_map = {
         'bfs': (3, 4),
-        'dfs': (6, 7),
-        'ucs': (9, 10),
-        'astar': (12, 13)
+        'dfs': (7, 8),
+        'ucs': (11, 12),
+        'astar': (15, 16)
     }
 
     # Get the line numbers for the given type
