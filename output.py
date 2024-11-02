@@ -1,10 +1,10 @@
 import os
 import time
 import tracemalloc
-from bfs import bfs, NODES
-from dfs import dfs, NODES
-from ucs import ucs, NODES
-from astar import astar, NODES
+from bfs import bfs
+from dfs import dfs
+from ucs import ucs
+from astar import astar
 from maze import Stone, WALL, FREE, STONE, ARES, SWITCH, ARES_ON_SWITCH, STONE_ON_SWITCH
 
 
