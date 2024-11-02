@@ -177,7 +177,7 @@ if __name__ == '__main__':
     #     result_str, weights = result(maze_path, dfs)
     #     print(result_str)
     #     print(weights)
-    maze_path = 'input\\input-04.txt'
+    maze_path = 'input\\input-09.txt'
     result_str, weights = result(maze_path, dfs)
     print(result_str)
     print(weights)
