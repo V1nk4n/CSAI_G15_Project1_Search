@@ -52,11 +52,10 @@ class Node:
                     new_stones[i_stone] = new_stone
 
                     new_maze[new_x_stone][new_y_stone] = STONE_ON_SWITCH if new_maze[new_x_stone][new_y_stone] == SWITCH else STONE
-                    new_maze[x][y] = SWITCH if (
-                        x, y) in self.switches else FREE
+                    new_maze[x][y] = SWITCH if (x, y) in self.switches else FREE
                     new_maze[new_x][new_y] = ARES_ON_SWITCH if new_maze[new_x][new_y] == SWITCH else ARES
 
-                    new_cost = self.cost + 1 + new_stone.weight
+                    new_cost = self.cost + 1 + stone.weight  # Cost includes moving Ares and the stone's weight
 
                     return Node(new_maze, new_ares, new_stones, self.switches, new_cost, self)
 
@@ -65,7 +64,9 @@ class Node:
 
         new_maze[x][y] = SWITCH if (x, y) in self.switches else FREE
         new_maze[new_x][new_y] = ARES_ON_SWITCH if new_maze[new_x][new_y] == SWITCH else ARES
-        return Node(new_maze, new_ares, new_stones, self.switches, self.cost + 1, self)
+        new_cost = self.cost + 1  # Cost for moving Ares without moving a stone
+
+        return Node(new_maze, new_ares, new_stones, self.switches, new_cost, self)
 
     def stone_in_corner(self):
         for stone in self.stones:
@@ -84,3 +85,28 @@ class Node:
             if next_state and not next_state.stone_in_corner():
                 neighbors.append(next_state)
         return neighbors
+
+def load_map(path):
+    with open(path, 'r') as file:
+        weights = list(map(int, file.readline().strip().split()))
+        maze = [list(line.strip()) for line in file.readlines()]
+
+    stones, switches = [], []
+    ares_start = None
+
+    for i, row in enumerate(maze):
+        for j, col in enumerate(row):
+            if col == ARES:
+                ares_start = (i, j)
+            elif col == STONE:
+                stones.append(Stone((i, j), weights[len(stones)]))
+            elif col == SWITCH:
+                switches.append((i, j))
+            elif col == ARES_ON_SWITCH:
+                ares_start = (i, j)
+                switches.append((i, j))
+            elif col == STONE_ON_SWITCH:
+                stones.append(Stone((i, j), weights[len(stones)]))
+                switches.append((i, j))
+
+    return maze, ares_start, stones, switches

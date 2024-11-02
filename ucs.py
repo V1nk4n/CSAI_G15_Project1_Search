@@ -1,6 +1,6 @@
-from queue import PriorityQueue
 from maze import WALL, FREE, STONE, ARES, SWITCH, STONE_ON_SWITCH, ARES_ON_SWITCH, Stone
 from node import Node
+from queue import PriorityQueue
 
 NODES = 0
 
@@ -47,11 +47,18 @@ def ucs(maze, ares_start, stones, switches):
                     break
             
             # If the neighbor state has not been expanded or found a cheaper path
-            if neighbor not in expanded and (neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]):
+            if neighbor not in expanded:
+                if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
+                    cost_so_far[neighbor] = new_cost
+                    neighbor.cost = new_cost
+                    frontier.put((new_cost, neighbor))
+                    NODES += 1
+            elif new_cost < cost_so_far[neighbor]:
                 cost_so_far[neighbor] = new_cost
-                neighbor.cost = new_cost
+                # Remove the old neighbor from the frontier
+                # Note: PriorityQueue does not support direct removal, so we need to re-add the neighbor with the updated cost
                 frontier.put((new_cost, neighbor))
-                NODES += 1
+                neighbor.cost = new_cost
 
     # If no solution is found, return an empty path and the number of nodes expanded
     return [], NODES
