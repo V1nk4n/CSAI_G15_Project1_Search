@@ -180,7 +180,7 @@ if __name__ == '__main__':
     #         maze_path = f'input\\input-{i+1}.txt'
     #     print(maze_path)
 
-    maze_path = f'input\\input-01.txt'
-    bfs_str, bfs_steps, bfs_weights, bfs_actions = result(maze_path, astar)
+    maze_path = input('File: ')
+    bfs_str, bfs_steps, bfs_weights = result(maze_path, ucs)
     print(bfs_str)
     print(bfs_weights)
