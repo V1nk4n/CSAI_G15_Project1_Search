@@ -3,7 +3,7 @@ from maze import WALL, FREE, STONE, ARES, SWITCH, STONE_ON_SWITCH, ARES_ON_SWITC
 
 
 class Node:
-    def __init__(self, maze, ares, stones, switches, g=0, prev_state=None):
+    def __init__(self, maze, ares, stones, switches, g = 0, prev_state=None):
         self.maze = [row[:] for row in maze]
         self.ares = ares
         self.stones = stones
@@ -32,7 +32,7 @@ class Node:
         new_x, new_y = x + move[0], y + move[1]
         width, height = len(self.maze), len(self.maze[0])
 
-        if new_x < 0 or new_x >= width or new_y < 0 or new_y >= height:
+        if not (0 <= new_x < width and 0 <= new_y < height):
             return None
 
         if self.maze[new_x][new_y] == WALL:
@@ -52,35 +52,64 @@ class Node:
                     new_stones[i_stone] = new_stone
 
                     new_maze[new_x_stone][new_y_stone] = STONE_ON_SWITCH if new_maze[new_x_stone][new_y_stone] == SWITCH else STONE
-                    new_maze[x][y] = SWITCH if (
-                        x, y) in self.switches else FREE
+                    new_maze[x][y] = SWITCH if (x, y) in self.switches else FREE
                     new_maze[new_x][new_y] = ARES_ON_SWITCH if new_maze[new_x][new_y] == SWITCH else ARES
 
-                    new_cost = self.cost + 1 + new_stone.weight
+
+                    new_cost = self.cost + 1 + stone.weight  # Cost includes moving Ares and the stone's weight
 
                     return Node(new_maze, new_ares, new_stones, self.switches, new_cost, self)
 
-        if self.maze[new_x][new_y] in (STONE, STONE_ON_SWITCH):
+        if new_maze[new_x][new_y] in (STONE, STONE_ON_SWITCH):
             return None
 
         new_maze[x][y] = SWITCH if (x, y) in self.switches else FREE
         new_maze[new_x][new_y] = ARES_ON_SWITCH if new_maze[new_x][new_y] == SWITCH else ARES
-        return Node(new_maze, new_ares, new_stones, self.switches, self.cost + 1, self)
+        new_cost = self.cost + 1  # Cost for moving Ares without moving a stone
+
+        return Node(new_maze, new_ares, new_stones, self.switches, new_cost, self)
 
     def stone_in_corner(self):
         for stone in self.stones:
             if stone.position not in self.switches:
                 x, y = stone.position
-                if (self.maze[x-1][y] == WALL or self.maze[x+1][y] == WALL) and (self.maze[x][y-1] == WALL or self.maze[x][y+1] == WALL):
-                    return True
+                if (x > 0 and x < len(self.maze) - 1 and y > 0 and y < len(self.maze[0]) - 1):
+                    if (self.maze[x-1][y] == WALL or self.maze[x+1][y] == WALL) and (self.maze[x][y-1] == WALL or self.maze[x][y+1] == WALL):
+                        return True
         return False
 
     def get_neighbors(self):
         moves = [(0, -1), (0, 1), (-1, 0), (1, 0)]
         neighbors = []
+        
         for move in moves:
             # Chỉ gọi get_state khi bước di chuyển hợp lệ
             next_state = self.get_state(move)
             if next_state and not next_state.stone_in_corner():
                 neighbors.append(next_state)
         return neighbors
+
+def load_map(path):
+    with open(path, 'r') as file:
+        weights = list(map(int, file.readline().strip().split()))
+        maze = [list(line.strip()) for line in file.readlines()]
+
+    stones, switches = [], []
+    ares_start = None
+
+    for i, row in enumerate(maze):
+        for j, col in enumerate(row):
+            if col == ARES:
+                ares_start = (i, j)
+            elif col == STONE:
+                stones.append(Stone((i, j), weights[len(stones)]))
+            elif col == SWITCH:
+                switches.append((i, j))
+            elif col == ARES_ON_SWITCH:
+                ares_start = (i, j)
+                switches.append((i, j))
+            elif col == STONE_ON_SWITCH:
+                stones.append(Stone((i, j), weights[len(stones)]))
+                switches.append((i, j))
+
+    return maze, ares_start, stones, switches
