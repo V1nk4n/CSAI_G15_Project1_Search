@@ -159,3 +159,4 @@ if __name__ == '__main__':
         if i >= 9:
             maze_path = f'input\\input-{i+1}.txt'
         solve(maze_path)
+
