@@ -44,6 +44,7 @@ class Node:
                  for switch in empty_switch),
                 key=lambda x: x[1]
             )
+
             h += ares_to_stone + stone_to_nearest_switch*stone.weight
             empty_switch.remove(nearest_switch)
         return h
